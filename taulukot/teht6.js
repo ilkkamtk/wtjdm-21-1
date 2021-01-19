@@ -11,6 +11,8 @@ for (; ;) {
 
 const lkm = luvut.length;
 
+luvut.sort((a,b) => a-b);
+
 let mediaani = 0;
 if (lkm % 2 === 0) {
   // parillinen
