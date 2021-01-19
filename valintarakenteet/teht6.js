@@ -14,9 +14,9 @@ if (luku % 400 === 0 || luku % 4 === 0 && luku % 100 !== 0) {
 }
 */
 
-if(luku % 4 === 0){
-  if(luku % 100 === 0){
-    if(luku % 400 === 0){
+if (luku % 4 === 0) {
+  if (luku % 100 === 0) {
+    if (luku % 400 === 0) {
       document.write('Vuosi on karkausvuosi');
     } else {
       document.write('Vuosi ei ole karkausvuosi');
