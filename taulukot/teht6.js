@@ -24,4 +24,4 @@ if (lkm % 2 === 0) {
   mediaani = luvut[(lkm - 1) / 2];
 }
 
-document.write(`Mediaani on ${mediaani}`);
+document.write(`Lukujen ${luvut.join(', ')} mediaani on ${mediaani}`);
