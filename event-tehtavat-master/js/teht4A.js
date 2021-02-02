@@ -22,3 +22,19 @@ for (let i = 0; i < pics.length; i++) {
   const html = `<li><img src="${pics[i].thumb}" alt="kuvake"></li>`;
   lista.innerHTML += html;
 }
+
+// valitse uudet img:t
+const kuvakkeet = document.querySelectorAll('ul img');
+
+// lisää uusiin img elementteihin eventit
+for (let i = 0; i < kuvakkeet.length; i++) {
+  kuvakkeet[i].addEventListener('click', function() {
+    isokuva.src = pics[i].big;
+    isokuva.alt = 'iso kuva';
+    div.classList.replace('hidden', 'visible');
+  });
+}
+
+isokuva.addEventListener('click', function() {
+  div.classList.replace('visible', 'hidden');
+});
