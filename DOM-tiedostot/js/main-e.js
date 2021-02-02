@@ -57,3 +57,32 @@ const picArray = [
 ];
 
 // Put code of task E here
+
+const main = document.querySelector('main');
+
+for(let i = 0; i < picArray.length; i++) {
+  const article = document.createElement('article');
+  const header = document.createElement('header');
+  const h2 = document.createElement('h2');
+  const figure = document.createElement('figure');
+  const figcaption = document.createElement('figcaption');
+  const img = document.createElement('img');
+  const p = document.createElement('p');
+
+  h2.innerHTML = picArray[i].title;
+  img.src = picArray[i].filename;
+  img.alt = picArray[i].title;
+  figcaption.innerHTML = picArray[i].caption;
+  p.innerHTML = picArray[i].description;
+
+  header.appendChild(h2);
+  article.appendChild(header);
+
+  figure.appendChild(img);
+  figure.appendChild(figcaption);
+  article.appendChild(figure);
+
+  article.appendChild(p)
+
+  main.appendChild(article);
+}
