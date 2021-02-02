@@ -59,12 +59,13 @@ function haeLatauspisteet(crd) {
       }).
       then(function(latauspisteet) {
         console.log(latauspisteet);
-        const koordinaatit = {
-          latitude: latauspisteet[0].AddressInfo.Latitude,
-          longitude: latauspisteet[0].AddressInfo.Longitude,
+        for(let i = 0; i < latauspisteet.length; i++) {
+          const koordinaatit = {
+            latitude: latauspisteet[i].AddressInfo.Latitude,
+            longitude: latauspisteet[i].AddressInfo.Longitude,
+          }
+          lisaaMarker(koordinaatit);
         }
-        lisaaMarker(koordinaatit);
-
       }).
       catch(function(virhe) {
         console.log(virhe);
