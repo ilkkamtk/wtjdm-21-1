@@ -14,6 +14,8 @@ const pics = [
 ];
 
 const lista = document.querySelector('ul');
+const div = document.querySelector('div');
+const isokuva = document.querySelector('div>img');
 
 for (let i = 0; i < pics.length; i++) {
   const li = document.createElement('li');
@@ -21,6 +23,17 @@ for (let i = 0; i < pics.length; i++) {
   img.src = pics[i].thumb;
   img.alt = 'kuvake';
 
+  img.addEventListener('click', function() {
+    // alert(pics[i].big);
+    isokuva.src = pics[i].big;
+    isokuva.alt = 'iso kuva';
+    div.classList.replace('hidden', 'visible');
+  });
+
   li.appendChild(img);
   lista.appendChild(li);
 }
+
+isokuva.addEventListener('click', function() {
+  div.classList.replace('visible', 'hidden');
+});

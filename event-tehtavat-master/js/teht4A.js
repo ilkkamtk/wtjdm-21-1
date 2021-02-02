@@ -15,8 +15,10 @@ const pics = [
 ];
 
 const lista = document.querySelector('ul');
+const div = document.querySelector('div');
+const isokuva = document.querySelector('div>img');
 
-for(let i = 0; i < pics.length; i++){
+for (let i = 0; i < pics.length; i++) {
   const html = `<li><img src="${pics[i].thumb}" alt="kuvake"></li>`;
   lista.innerHTML += html;
 }
