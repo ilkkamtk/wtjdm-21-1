@@ -37,6 +37,8 @@ function success(pos) {
   paivitaKartta(crd);
   // lisää marker omaan lokaatioon
   lisaaMarker(crd);
+  // hae latauspisteet
+  haeLatauspisteet(crd);
 
 }
 
@@ -48,13 +50,23 @@ function error(err) {
 // Käynnistetään paikkatietojen haku
 navigator.geolocation.getCurrentPosition(success, error, options);
 
-fetch(
-    'https://api.openchargemap.io/v3/poi/?latitude=60.2&longitude=24.9&distance=10&distanceunit=KM').
-    then(function(vastaus) {
-      // console.log(vastaus);
-      return vastaus.json();
-    }).
-    then(function(latauspisteet){
-      console.log(latauspisteet);
-    });
+function haeLatauspisteet(crd) {
+  fetch(
+      `https://api.openchargemap.io/v3/poi/?latitude=${crd.latitude}&longitude=${crd.longitude}&distance=10&distanceunit=KM`).
+      then(function(vastaus) {
+        // console.log(vastaus);
+        return vastaus.json();
+      }).
+      then(function(latauspisteet) {
+        console.log(latauspisteet);
+        const koordinaatit = {
+          latitude: latauspisteet[0].AddressInfo.Latitude,
+          longitude: latauspisteet[0].AddressInfo.Longitude,
+        }
+        lisaaMarker(koordinaatit);
 
+      }).
+      catch(function(virhe) {
+        console.log(virhe);
+      });
+}
