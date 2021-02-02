@@ -18,10 +18,9 @@ function paivitaKartta(crd) {
 
 // Funktio, jolla tehdään markkerit
 function lisaaMarker(crd) {
-  L.marker([crd.latitude, crd.longitude]).
-      addTo(map).
-      bindPopup('Olen tässä.').
-      openPopup();
+  const markkeri = L.marker([crd.latitude, crd.longitude]).
+      addTo(map);
+  return markkeri;
 }
 
 // Funktio, joka ajetaan, kun paikkatiedot on haettu
@@ -36,7 +35,8 @@ function success(pos) {
   // keskitä (ja näytä) kartta
   paivitaKartta(crd);
   // lisää marker omaan lokaatioon
-  lisaaMarker(crd);
+  const omaPaikka = lisaaMarker(crd);
+  omaPaikka.bindPopup('Olen tässä.').openPopup();
   // hae latauspisteet
   haeLatauspisteet(crd);
 
@@ -59,12 +59,13 @@ function haeLatauspisteet(crd) {
       }).
       then(function(latauspisteet) {
         console.log(latauspisteet);
-        for(let i = 0; i < latauspisteet.length; i++) {
+        for (let i = 0; i < latauspisteet.length; i++) {
           const koordinaatit = {
             latitude: latauspisteet[i].AddressInfo.Latitude,
             longitude: latauspisteet[i].AddressInfo.Longitude,
-          }
-          lisaaMarker(koordinaatit);
+          };
+          const latauspiste = lisaaMarker(koordinaatit);
+          latauspiste.bindPopup(latauspisteet[i].AddressInfo.Title);
         }
       }).
       catch(function(virhe) {
