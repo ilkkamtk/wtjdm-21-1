@@ -1,9 +1,15 @@
+'use strict';
+const cors = 'https://cors-anywhere.herokuapp.com/';
 // Asetukset paikkatiedon hakua varten (valinnainen)
 const options = {
   enableHighAccuracy: true,
   timeout: 5000,
   maximumAge: 0,
 };
+const nimi = document.getElementById('nimi');
+const osoite = document.getElementById('osoite');
+const kaupunki = document.getElementById('kaupunki');
+const lisatiedot = document.getElementById('lisatiedot');
 
 // Käytetään leaflet.js -kirjastoa näyttämään sijainti kartalla (https://leafletjs.com/)
 const map = L.map('map');
@@ -38,8 +44,9 @@ function success(pos) {
   const omaPaikka = lisaaMarker(crd);
   omaPaikka.bindPopup('Olen tässä.').openPopup();
   // hae latauspisteet
-  haeLatauspisteet(crd);
-
+  //haeLatauspisteet(crd);
+  // haetaankin helsingin ruakakaupat
+  haeRuokakaupat();
 }
 
 // Funktio, joka ajetaan, jos paikkatietojen hakemisessa tapahtuu virhe
@@ -49,6 +56,32 @@ function error(err) {
 
 // Käynnistetään paikkatietojen haku
 navigator.geolocation.getCurrentPosition(success, error, options);
+
+// blan B
+function haeRuokakaupat(){
+  fetch(`${cors}https://open-api.myhelsinki.fi/v1/places/?tags_filter=SHOPPING%2CGrocery`).
+      then(function(vastaus){
+        return vastaus.json();
+      }).
+      then(function(kaupat){
+        console.log(kaupat.data);
+        for (let i = 0; i < kaupat.data.length; i++) {
+          const koordinaatit = {
+            latitude: kaupat.data[i].location.lat,
+            longitude: kaupat.data[i].location.lon,
+          };
+          const kauppa = lisaaMarker(koordinaatit);
+          kauppa.bindPopup(kaupat.data[i].name.fi);
+        }
+
+      }).
+      catch(function(virhe) {
+        console.log(virhe);
+      });
+}
+
+
+
 
 function haeLatauspisteet(crd) {
   fetch(
