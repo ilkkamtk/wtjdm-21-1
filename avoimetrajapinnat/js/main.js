@@ -72,6 +72,12 @@ function haeRuokakaupat(){
           };
           const kauppa = lisaaMarker(koordinaatit);
           kauppa.bindPopup(kaupat.data[i].name.fi);
+          kauppa.on('popupopen', function(){
+            nimi.innerHTML = kaupat.data[i].name.fi;
+            osoite.innerHTML = kaupat.data[i].location.address.street_address;
+            kaupunki.innerHTML = kaupat.data[i].location.address.locality;
+            lisatiedot.innerHTML = kaupat.data[i].description.body;
+          });
         }
 
       }).
