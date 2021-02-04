@@ -6,6 +6,8 @@ const cors = 'https://users.metropolia.fi/~ilkkamtk/proxy.php/?ur=';
 const punainenIkoni = L.divIcon({className: 'punainen-ikoni'});
 const vihreaIkoni = L.divIcon({className: 'vihrea-ikoni'});
 
+// taulukko johon kerätään markkerit
+const markkerit = [];
 
 // Asetukset paikkatiedon hakua varten (valinnainen)
 const options = {
@@ -50,6 +52,7 @@ function success(pos) {
   // lisää marker omaan lokaatioon
   const omaPaikka = lisaaMarker(crd, vihreaIkoni);
   omaPaikka.bindPopup('Olen tässä.').openPopup();
+  markkerit.push(omaPaikka);
   // hae latauspisteet
   //haeLatauspisteet(crd);
   // haetaankin helsingin ruakakaupat
@@ -78,6 +81,7 @@ function haeRuokakaupat(){
             longitude: kaupat.data[i].location.lon,
           };
           const kauppa = lisaaMarker(koordinaatit, punainenIkoni);
+          markkerit.push(kauppa);
           kauppa.bindPopup(kaupat.data[i].name.fi);
           kauppa.on('popupopen', function(){
             nimi.innerHTML = kaupat.data[i].name.fi;
@@ -86,7 +90,9 @@ function haeRuokakaupat(){
             lisatiedot.innerHTML = kaupat.data[i].description.body;
           });
         }
-
+        // featureGroup markkereita varten
+        const ryhma = new L.featureGroup(markkerit);
+        map.fitBounds(ryhma.getBounds());
       }).
       catch(function(virhe) {
         console.log(virhe);
