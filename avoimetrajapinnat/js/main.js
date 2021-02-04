@@ -1,5 +1,12 @@
 'use strict';
-const cors = 'https://cors-anywhere.herokuapp.com/';
+// const cors = 'https://cors-anywhere.herokuapp.com/';
+const cors = 'https://users.metropolia.fi/~ilkkamtk/proxy.php/?ur=';
+
+// kustomi ikonit css:llä
+const punainenIkoni = L.divIcon({className: 'punainen-ikoni'});
+const vihreaIkoni = L.divIcon({className: 'vihrea-ikoni'});
+
+
 // Asetukset paikkatiedon hakua varten (valinnainen)
 const options = {
   enableHighAccuracy: true,
@@ -23,8 +30,8 @@ function paivitaKartta(crd) {
 }
 
 // Funktio, jolla tehdään markkerit
-function lisaaMarker(crd) {
-  const markkeri = L.marker([crd.latitude, crd.longitude]).
+function lisaaMarker(crd, ikoni) {
+  const markkeri = L.marker([crd.latitude, crd.longitude], {icon: ikoni}).
       addTo(map);
   return markkeri;
 }
@@ -41,7 +48,7 @@ function success(pos) {
   // keskitä (ja näytä) kartta
   paivitaKartta(crd);
   // lisää marker omaan lokaatioon
-  const omaPaikka = lisaaMarker(crd);
+  const omaPaikka = lisaaMarker(crd, vihreaIkoni);
   omaPaikka.bindPopup('Olen tässä.').openPopup();
   // hae latauspisteet
   //haeLatauspisteet(crd);
@@ -70,7 +77,7 @@ function haeRuokakaupat(){
             latitude: kaupat.data[i].location.lat,
             longitude: kaupat.data[i].location.lon,
           };
-          const kauppa = lisaaMarker(koordinaatit);
+          const kauppa = lisaaMarker(koordinaatit, punainenIkoni);
           kauppa.bindPopup(kaupat.data[i].name.fi);
           kauppa.on('popupopen', function(){
             nimi.innerHTML = kaupat.data[i].name.fi;
