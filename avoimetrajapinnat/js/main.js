@@ -1,6 +1,7 @@
 'use strict';
 // const cors = 'https://cors-anywhere.herokuapp.com/';
 const cors = 'https://users.metropolia.fi/~ilkkamtk/proxy.php/?ur=';
+const google = 'https://www.google.com/maps/dir/?api=1&';
 
 // kustomi ikonit css:llä
 const punainenIkoni = L.divIcon({className: 'punainen-ikoni'});
@@ -15,10 +16,12 @@ const options = {
   timeout: 5000,
   maximumAge: 0,
 };
+
 const nimi = document.getElementById('nimi');
 const osoite = document.getElementById('osoite');
 const kaupunki = document.getElementById('kaupunki');
 const lisatiedot = document.getElementById('lisatiedot');
+const navigoi = document.querySelector('#navigoi a');
 
 // Käytetään leaflet.js -kirjastoa näyttämään sijainti kartalla (https://leafletjs.com/)
 const map = L.map('map');
@@ -68,12 +71,13 @@ function error(err) {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 // blan B
-function haeRuokakaupat(){
-  fetch(`${cors}https://open-api.myhelsinki.fi/v1/places/?tags_filter=SHOPPING%2CGrocery`).
-      then(function(vastaus){
+function haeRuokakaupat() {
+  fetch(
+      `${cors}https://open-api.myhelsinki.fi/v1/places/?tags_filter=SHOPPING,Grocery`).
+      then(function(vastaus) {
         return vastaus.json();
       }).
-      then(function(kaupat){
+      then(function(kaupat) {
         console.log(kaupat.data);
         for (let i = 0; i < kaupat.data.length; i++) {
           const koordinaatit = {
@@ -83,11 +87,12 @@ function haeRuokakaupat(){
           const kauppa = lisaaMarker(koordinaatit, punainenIkoni);
           markkerit.push(kauppa);
           kauppa.bindPopup(kaupat.data[i].name.fi);
-          kauppa.on('popupopen', function(){
+          kauppa.on('popupopen', function() {
             nimi.innerHTML = kaupat.data[i].name.fi;
             osoite.innerHTML = kaupat.data[i].location.address.street_address;
             kaupunki.innerHTML = kaupat.data[i].location.address.locality;
             lisatiedot.innerHTML = kaupat.data[i].description.body;
+            navigoi.href = `${google}origin=X,Y&destination=${koordinaatit.latitude},${koordinaatit.longitude}&travelmode=transit&dir_action=navigate`;
           });
         }
         // featureGroup markkereita varten
@@ -98,9 +103,6 @@ function haeRuokakaupat(){
         console.log(virhe);
       });
 }
-
-
-
 
 function haeLatauspisteet(crd) {
   fetch(
