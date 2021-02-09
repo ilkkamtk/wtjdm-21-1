@@ -59,7 +59,7 @@ function success(pos) {
   // hae latauspisteet
   //haeLatauspisteet(crd);
   // haetaankin helsingin ruakakaupat
-  haeRuokakaupat();
+  haeRuokakaupat(crd);
 }
 
 // Funktio, joka ajetaan, jos paikkatietojen hakemisessa tapahtuu virhe
@@ -71,7 +71,7 @@ function error(err) {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 // blan B
-function haeRuokakaupat() {
+function haeRuokakaupat(crd) {
   fetch(
       `${cors}https://open-api.myhelsinki.fi/v1/places/?tags_filter=SHOPPING,Grocery`).
       then(function(vastaus) {
@@ -92,7 +92,7 @@ function haeRuokakaupat() {
             osoite.innerHTML = kaupat.data[i].location.address.street_address;
             kaupunki.innerHTML = kaupat.data[i].location.address.locality;
             lisatiedot.innerHTML = kaupat.data[i].description.body;
-            navigoi.href = `${google}origin=X,Y&destination=${koordinaatit.latitude},${koordinaatit.longitude}&travelmode=transit&dir_action=navigate`;
+            navigoi.href = `${google}origin=${crd.latitude},${crd.longitude}&destination=${koordinaatit.latitude},${koordinaatit.longitude}&travelmode=transit&dir_action=navigate`;
           });
         }
         // featureGroup markkereita varten
